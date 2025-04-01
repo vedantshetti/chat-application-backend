@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const express = require('express');
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import express from 'express';
 const app = express();
 
 dotenv.config();
