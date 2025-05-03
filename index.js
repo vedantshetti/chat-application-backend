@@ -4,29 +4,25 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoute from './routes/userRoute.js';
 import connectDB from './config/database.js';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 dotenv.config();
 
+// Apply middleware
 app.use(express.json());
+app.use(cookieParser()); // This was missing
+app.use(cors({
+  origin: 'http://localhost:3000', // or your frontend URL
+  credentials: true // Important for cookies to work with CORS
+}));
 
-//routes
+// Define routes
 app.use("/api/v1/user", userRoute);
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
-});
-
-// Connect to MongoDB
+// Connect to MongoDB then start server
 connectDB()
   .then(() => {
-    // Start the server only after successfully connecting to the database
-    app.use(express.json());
-    app.use(cors());
-
-    //routes
-    app.use("/api/v1/user", userRoute);
-
     app.listen(process.env.PORT, () => {
       console.log(`Server is running on port ${process.env.PORT}`);
     });

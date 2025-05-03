@@ -77,4 +77,30 @@ export const login = async (req, res) => {
   }
 };
 
+export const logout = async (req, res) => {
+  try {
+    res
+      .clearCookie("token")
+      .status(200)
+      .json({ message: "Logout successful", success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
+export const getOtherUser = async (req, res) => {
+  try {
+    const loggedInUserId = req.id;
+    const otherUsers = await User.find({ _id: { $ne: loggedInUserId } }).select(
+      "-password -__v"
+    );
+    if (!otherUsers) {
+      return res.status(404).json({ message: "No users found" });
+    }
+    return res.status(200).json({ message: "Users found", otherUsers });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+}
