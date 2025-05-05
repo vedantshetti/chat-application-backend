@@ -50,3 +50,34 @@ export const sendMessage = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 }
+
+
+export const getMessages = async (req, res) => {
+    try {
+        const senderId = req.id;
+        const receiverId = req.params.id;
+
+        if  (!senderId || !receiverId) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        // Find the conversation
+        const conversation = await Conversation.findOne({
+            participants: { $all: [senderId, receiverId] }
+        }).populate("messages");
+
+        if (!conversation) {
+            return res.status(404).json({ message: "Conversation not found" });
+        }
+
+        return res.status(200).json({
+            message: "Messages retrieved successfully",
+            success: true,
+            data: conversation.messages
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+}
