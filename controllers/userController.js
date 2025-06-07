@@ -69,7 +69,7 @@ export const login = async (req, res) => {
     });
     return res
       .status(200)
-      .cookie("token", token, { maxage: 24 * 60 * 60 * 1000 })
+      .cookie("token", token, { maxAge: 24 * 60 * 60 * 1000 })
       .json({ message: "Login successful", token, user });
   } catch (error) {
     console.error(error);
@@ -98,7 +98,7 @@ export const getOtherUser = async (req, res) => {
     if (!otherUsers) {
       return res.status(404).json({ message: "No users found" });
     }
-    return res.status(200).json({ message: "Users found", otherUsers });
+    return res.status(200).json({ message: "Users found",  otherUsers: otherUsers || [] });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });

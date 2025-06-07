@@ -9,4 +9,3 @@ router.route("/logout").get(logout);
 router.route("/").get(isAuthenticated,getOtherUser)
 
 export default router;
-  
